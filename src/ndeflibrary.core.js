@@ -71,7 +71,7 @@ function initLibraryCore (context) {
    * configure this instance of the library.
    * @constructor
    */
-  var Library = context.Library = function (opt_config) {
+  var NdefLibrary = context.NdefLibrary = function (opt_config) {
 
     opt_config = opt_config || {};
 
@@ -106,7 +106,7 @@ function initLibraryCore (context) {
    * An example of a protoype method.
    * @return {string}
    */
-  Library.prototype.getReadOnlyVar = function () {
+  NdefLibrary.prototype.getReadOnlyVar = function () {
     return this._readOnlyVar;
   };
 
@@ -123,7 +123,7 @@ function initLibraryCore (context) {
    *
    * @return {Library}
    */
-  Library.prototype.chainableMethod = function () {
+  NdefLibrary.prototype.chainableMethod = function () {
     return this;
   };
 

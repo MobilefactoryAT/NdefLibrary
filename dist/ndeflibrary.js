@@ -1,4 +1,4 @@
-/*! lib-tmpl - v0.2.0 - 2014-03-14 - Jeremy Kahn */
+/*! lib-ndeflibrary - v0.0.1 - 2014-03-14 - Sebastian Höbarth */
 ;(function (global) {
 
 // Compiler directive for UglifyJS.  See library.const.js for more info.
@@ -74,7 +74,7 @@ function initLibraryCore (context) {
    * configure this instance of the library.
    * @constructor
    */
-  var Library = context.Library = function (opt_config) {
+  var NdefLibrary = context.NdefLibrary = function (opt_config) {
 
     opt_config = opt_config || {};
 
@@ -109,7 +109,7 @@ function initLibraryCore (context) {
    * An example of a protoype method.
    * @return {string}
    */
-  Library.prototype.getReadOnlyVar = function () {
+  NdefLibrary.prototype.getReadOnlyVar = function () {
     return this._readOnlyVar;
   };
 
@@ -126,7 +126,7 @@ function initLibraryCore (context) {
    *
    * @return {Library}
    */
-  Library.prototype.chainableMethod = function () {
+  NdefLibrary.prototype.chainableMethod = function () {
     return this;
   };
 
@@ -157,7 +157,7 @@ function initLibraryModule (context) {
 
   'use strict';
 
-  var Library = context.Library;
+  var NdefLibrary = context.NdefLibrary;
 
 
   // A library module can do two things to the Library Object:  It can extend
@@ -193,7 +193,7 @@ function initLibraryModule (context) {
    * is also an instantiable Object.
    * @constructor
    */
-  Library.LibraryHelper = function () {
+  NdefLibrary.LibraryHelper = function () {
     return this;
   };
 
@@ -207,7 +207,7 @@ function initLibraryModule (context) {
    * An example of a prototype method.
    * @return {string}
    */
-  Library.prototype.alternateGetReadOnlyVar = function () {
+  NdefLibrary.prototype.alternateGetReadOnlyVar = function () {
     // Note that a module can access all of the Library instance variables with
     // the `this` keyword.
     return this._readOnlyVar;
@@ -233,7 +233,7 @@ function initLibraryModule (context) {
 function initLibrarySubmodule (context) {
   'use strict';
 
-  var Library = context.Library;
+  var NdefLibrary = context.NdefLibrary;
 
   /*
    * The submodule constructor
@@ -241,7 +241,7 @@ function initLibrarySubmodule (context) {
    * configure this instance of the library.
    * @constructor
    */
-  var submodule = Library.Submodule = function(opt_config) {
+  var submodule = NdefLibrary.Submodule = function(opt_config) {
     
     // defines a temporary variable, 
     // living only as long as the constructor runs.
@@ -280,7 +280,7 @@ function initLibrarySubmodule (context) {
   };
 }
 /*global initLibraryCore initLibraryModule initLibrarySubmodule */
-var initLibrary = function (context) {
+var initNdefLibrary = function (context) {
 
   initLibraryCore(context);
   initLibraryModule(context);
@@ -292,7 +292,7 @@ var initLibrary = function (context) {
   //
   // initAwesomeModule(context);
 
-  return context.Library;
+  return context.NdefLibrary;
 };
 
 
@@ -300,12 +300,12 @@ if (typeof define === 'function' && define.amd) {
   // Expose Library as an AMD module if it's loaded with RequireJS or
   // similar.
   define(function () {
-    return initLibrary({});
+    return initNdefLibrary({});
   });
 } else {
   // Load Library normally (creating a Library global) if not using an AMD
   // loader.
-  initLibrary(this);
+  initNdefLibrary(this);
 }
 
 } (this));

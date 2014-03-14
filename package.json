@@ -1,7 +1,7 @@
 {
-  "name": "NdefLibrary",
+  "name": "lib-ndeflibrary",
   "version": "0.0.1",
-  "description": "Ndef Message Library",
+  "description": "NDEF Library for NFC",
   "directories": {
     "test": "test",
     "doc": "doc"

@@ -1,5 +1,5 @@
 {
-  "name": "NdefLibrary",
-  "version": "0.2.0",
-  "main": "./dist/library.min.js"
+  "name": "lib-ndeflibrary",
+  "version": "0.0.1",
+  "main": "./dist/ndeflibrary.min.js"
 }

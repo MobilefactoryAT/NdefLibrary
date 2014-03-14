@@ -10,7 +10,7 @@ function initLibraryModule (context) {
 
   'use strict';
 
-  var Library = context.Library;
+  var NdefLibrary = context.NdefLibrary;
 
 
   // A library module can do two things to the Library Object:  It can extend
@@ -20,35 +20,29 @@ function initLibraryModule (context) {
 
   // PRIVATE MODULE CONSTANTS
   //
-
-
-  var MODULE_CONSTANT = true;
+  // var MODULE_CONSTANT = true;
 
 
   // PRIVATE MODULE METHODS
   //
-
-
-  /**
-   *  An example of a private method.  Feel free to remove this.
-   */
-  function modulePrivateMethod () {
-    return;
-  }
+  // /**
+   // *  An example of a private method.  Feel free to remove this.
+   // */
+  // function modulePrivateMethod () {
+    // return;
+  // }
 
 
   // LIBRARY STATIC PROPERTIES
   //
-
-
-  /**
-   * An example of a static Library property.  This particular static property
-   * is also an instantiable Object.
-   * @constructor
-   */
-  Library.LibraryHelper = function () {
-    return this;
-  };
+  // /**
+   // * An example of a static Library property.  This particular static property
+   // * is also an instantiable Object.
+   // * @constructor
+   // */
+  // NdefLibrary.LibraryHelper = function () {
+    // return this;
+  // };
 
 
   // LIBRARY PROTOTYPE EXTENSIONS
@@ -56,15 +50,15 @@ function initLibraryModule (context) {
   // A module can extend the prototype of the Library Object.
 
 
-  /**
-   * An example of a prototype method.
-   * @return {string}
-   */
-  Library.prototype.alternateGetReadOnlyVar = function () {
-    // Note that a module can access all of the Library instance variables with
-    // the `this` keyword.
-    return this._readOnlyVar;
-  };
+  // /**
+   // * An example of a prototype method.
+   // * @return {string}
+   // */
+  // NdefLibrary.prototype.alternateGetReadOnlyVar = function () {
+    // // Note that a module can access all of the Library instance variables with
+    // // the `this` keyword.
+    // return this._readOnlyVar;
+  // };
 
 
   if (DEBUG) {

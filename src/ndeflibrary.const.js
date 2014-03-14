@@ -18,6 +18,31 @@
 
 const DEBUG = false;
 
+const arrayCopy = function() {
+      var src, srcPos = 0,
+        dest, destPos = 0,
+        length;
+        
+      if (arguments.length === 2) {
+        src = arguments[0];
+        dest = arguments[1];
+        length = src.length;
+      } else if (arguments.length === 3) {
+        src = arguments[0];
+        dest = arguments[1];
+        length = arguments[2];
+      } else if (arguments.length === 5) {
+        src = arguments[0];
+        srcPos = arguments[1];
+        dest = arguments[2];
+        destPos = arguments[3];
+        length = arguments[4];
+      }
+      for (var i = srcPos, j = destPos; i < length + srcPos; i++, j++) if (dest[j] !== null) dest[j] = src[i];
+      else throw "array index out of bounds exception";
+};
+
+
 // If you add more consts here, you need to initialize them in library.core.js
 // to true.  So if you add:
 //

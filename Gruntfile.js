@@ -10,18 +10,14 @@ module.exports = function(grunt) {
     return head.concat(MODULE_LIST).concat(tail);
   }
 
-  // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-  // You will want to chage the value of this constant to whatever your library
-  // is called.
-  // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-  var LIBRARY_NAME = 'library';
+  var LIBRARY_NAME = 'ndeflibrary';
 
   // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
   // Add your modules to this list
   // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
   var MODULE_LIST = [
       sub('src/%s.module.js'),
-      sub('src/submodule/%s.submodule.js')
+      sub('src/submodule/%s.NdefRecord.js')
     ];
 
   var DIST_HEAD_LIST = [

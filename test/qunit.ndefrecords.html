@@ -50,18 +50,20 @@
     	ndefRecord.setTypeNameFormat(NdefLibrary.NdefRecord.TypeNameFormatType.NfcRtd);
     	
 		equal(ndefRecord.getTypeNameFormat(), "1");
-		
      });
 
 
-     test('_type setter getter', function() {
+     test('type setter getter', function() {
         var ndefRecord = new NdefLibrary.NdefRecord();
 		
     	var array = new Array(1,3,1,3);
     	equal(array, array);
     	
     	ndefRecord.setType(array);
-        equal(ndefRecord.getType(), array);
+    	var t = ndefRecord.getType();
+    	console.log(t);
+    	console.log(array);
+        deepEqual(t, array);
      });
      
      
@@ -73,7 +75,7 @@
     	equal(array, array);
     	
     	ndefRecord.setId(array);
-        equal(ndefRecord.getId(), array);
+        deepEqual(ndefRecord.getId(), array);
      });
 
      test('_payload setter getter', function() {
@@ -83,23 +85,23 @@
     	equal(array, array);
     	
     	ndefRecord.setPayload(array);
-        equal(ndefRecord.getPayload(), array);
+        deepEqual(ndefRecord.getPayload(), array);
      });
 
      test('empty consturctor', function() {
         var ndefRecord = new NdefLibrary.NdefRecord();
 
 		equal(ndefRecord.getTypeNameFormat(), NdefLibrary.NdefRecord.TypeNameFormatType.Empty);
-        equal(ndefRecord.getType(), []);
-        equal(ndefRecord.getId(), []);
+        deepEqual(ndefRecord.getType(), []);
+        deepEqual(ndefRecord.getId(), []);
      });
 
      test('type consturctor', function() {
 		var array = new Array(1,3,1,3,000000,0,0,0,0,0,0,0,0,00,0,0,5);
     	var ndefRecord = new NdefLibrary.NdefRecord(NdefLibrary.NdefRecord.TypeNameFormatType.NfcRtd, array);
         equal(ndefRecord.getTypeNameFormat(), NdefLibrary.NdefRecord.TypeNameFormatType.NfcRtd);
-        equal(ndefRecord.getType(), array);
-        equal(ndefRecord.getId(), []);
+        deepEqual(ndefRecord.getType(), array);
+        deepEqual(ndefRecord.getId(), []);
      });
 
      test('copy consturctor', function() {
@@ -109,11 +111,11 @@
     	var ndefRecord2 = new NdefLibrary.NdefRecord(ndefRecord);
     	
         equal(ndefRecord.getTypeNameFormat(), ndefRecord2.getTypeNameFormat());
-        equal(ndefRecord.getType(), ndefRecord2.getType());
-        equal(ndefRecord.getId(), ndefRecord2.getId());
+        deepEqual(ndefRecord.getType(), ndefRecord2.getType());
+        deepEqual(ndefRecord.getId(), ndefRecord2.getId());
         
         ndefRecord2.setId(array);
-        // refute.equals(ndefRecord.getId(), ndefRecord2.getId());
+        notDeepEqual(ndefRecord.getId(), ndefRecord2.getId());
 		
      });
 
@@ -121,15 +123,15 @@
 
 		var array = new Array();
     	var ndefRecord = new NdefLibrary.NdefRecord(NdefLibrary.NdefRecord.TypeNameFormatType.Unchanged, array);
-        equal(ndefRecord.checkIfValid(), true);
+        deepEqual(ndefRecord.checkIfValid(), true);
         
         ndefRecord = new NdefLibrary.NdefRecord(NdefLibrary.NdefRecord.TypeNameFormatType.Unknown, array);
-        equal(ndefRecord.checkIfValid(), true);
+        deepEqual(ndefRecord.checkIfValid(), true);
         
         ndefRecord = new NdefLibrary.NdefRecord(NdefLibrary.NdefRecord.TypeNameFormatType.NfcRtd, new Array(1,2,3));
-        equal(ndefRecord.checkIfValid(), true);
+        deepEqual(ndefRecord.checkIfValid(), true);
      });
-
+ 
      
      
 

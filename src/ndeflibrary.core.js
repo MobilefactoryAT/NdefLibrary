@@ -39,29 +39,6 @@ function initLibraryCore (context) {
   'use strict';
 
 
-  // PRIVATE MODULE CONSTANTS
-  //
-
-
-  // An example of a CONSTANT variable;
-  var CORE_CONSTANT = true;
-
-
-  // PRIVATE MODULE METHODS
-  //
-  // These do not get attached to a prototype.  They are private utility
-  // functions.
-
-
-  /**
-   *  An example of a private method.  Feel free to remove this.
-   *  @param {number} aNumber This is a parameter description.
-   *  @returns {number} This is a return value description.
-   */
-  function corePrivateMethod (aNumber) {
-    return aNumber;
-  }
-
 
   /**
    * This is the constructor for the Library Object.  Please rename it to
@@ -75,24 +52,6 @@ function initLibraryCore (context) {
 
     opt_config = opt_config || {};
 
-    // INSTANCE PROPERTY SETUP
-    //
-    // Your library likely has some instance-specific properties.  The value of
-    // these properties can depend on any number of things, such as properties
-    // passed in via opt_config or global state.  Whatever the case, the values
-    // should be set in this constructor.
-
-    // Instance variables that have a leading underscore mean that they should
-    // not be modified outside of the library.  They can be freely modified
-    // internally, however.  If an instance variable will likely be accessed
-    // outside of the library, consider making a public getter function for it.
-    this._readOnlyVar = 'read only';
-
-    // Instance variables that do not have an underscore prepended are
-    // considered to be part of the library's public API.  External code may
-    // change the value of these variables freely.
-    this.readAndWrite = 'read and write';
-
     return this;
   };
 
@@ -102,39 +61,12 @@ function initLibraryCore (context) {
   // These methods define the public API.
 
 
-  /**
-   * An example of a protoype method.
-   * @return {string}
-   */
-  NdefLibrary.prototype.getReadOnlyVar = function () {
-    return this._readOnlyVar;
-  };
-
-
-  /**
-   * This is an example of a chainable method.  That means that the return
-   * value of this function is the library instance itself (`this`).  This lets
-   * you do chained method calls like this:
-   *
-   * var myLibrary = new Library();
-   * myLibrary
-   *   .chainableMethod()
-   *   .chainableMethod();
-   *
-   * @return {Library}
-   */
-  NdefLibrary.prototype.chainableMethod = function () {
-    return this;
-  };
-
-
   // DEBUG CODE
   //
   // With compiler directives, you can wrap code in a conditional check to
   // ensure that it does not get included in the compiled binaries.  This is
   // useful for exposing certain properties and methods that are needed during
   // development and testing, but should be private in the compiled binaries.
-
 
   if (DEBUG) {
     GLOBAL.corePrivateMethod = corePrivateMethod;

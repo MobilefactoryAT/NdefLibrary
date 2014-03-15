@@ -1,20 +1,32 @@
-// This file is used in the build process to enable or disable features in the
-// compiled binary.  Here's how it works:  If you have a const defined like so:
-//
-//   const MY_AWESOME_FEATURE_IS_ENABLED = false;
-//
-// ...And the compiler (UglifyJS) sees this in your code:
-//
-//   if (MY_AWESOME_FEATURE_IS_ENABLED) {
-//     doSomeStuff();
-//   }
-//
-// ...Then the if statement (and everything in it) is removed - it is
-// considered dead code.  If it's set to a truthy value:
-//
-//   const MY_AWESOME_FEATURE_IS_ENABLED = true;
-//
-// ...Then the compiler leaves the if (and everything in it) alone.
+/****************************************************************************
+**
+** Copyright (C) 2012-2014 Sebastian Höbarth, http://www.mobilefactory.at/
+** Original version copyright (C) 2012 Nokia Corporation and/or its subsidiary(-ies).
+** All rights reserved.
+**
+** This file is based on the respective class of the Connectivity module
+** of Qt Mobility (http://qt.gitorious.org/qt-mobility).
+**
+** Ported to Javascript by Sebastian Höbarth (2014)
+** More information: http://ndef.codeplex.com/
+**
+** GNU Lesser General Public License Usage
+** This file may be used under the terms of the GNU Lesser General Public
+** License version 2.1 as published by the Free Software Foundation and
+** appearing in the file LICENSE.LGPL included in the packaging of this
+** file. Please review the following information to ensure the GNU Lesser
+** General Public License version 2.1 requirements will be met:
+** http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html.
+**
+** GNU General Public License Usage
+** Alternatively, this file may be used under the terms of the GNU General
+** Public License version 3.0 as published by the Free Software Foundation
+** and appearing in the file LICENSE.GPL included in the packaging of this
+** file. Please review the following information to ensure the GNU General
+** Public License version 3.0 requirements will be met:
+** http://www.gnu.org/copyleft/gpl.html.
+**
+****************************************************************************/
 
 const DEBUG = false;
 
@@ -42,14 +54,19 @@ const arrayCopy = function() {
       else throw "array index out of bounds exception";
 };
 
+const addToArray = function(array, content) {
+      var src, srcPos = 0,
+        dest, destPos = 0,
+        length;
+        
+      src = content;
+      srcPos = 0;
+      dest = array;
+      destPos = array.length;
+      length = content.length;
+      
+      for (var i = srcPos, j = destPos; i < length + srcPos; i++, j++) if (dest[j] !== null) dest[j] = src[i];
+      else throw "array index out of bounds exception";
+};
 
-// If you add more consts here, you need to initialize them in library.core.js
-// to true.  So if you add:
-//
-//   const MY_AWESOME_FEATURE_IS_ENABLED = /* any value */;
-//
-// Then in library.core.js you need to add:
-//
-//   if (typeof MY_AWESOME_FEATURE_IS_ENABLED === 'undefined') {
-//     MY_AWESOME_FEATURE_IS_ENABLED = true;
-//   }
+

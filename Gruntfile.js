@@ -17,7 +17,8 @@ module.exports = function(grunt) {
   // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
   var MODULE_LIST = [
       sub('src/%s.module.js'),
-      sub('src/submodule/%s.NdefRecord.js')
+      sub('src/submodule/%s.NdefRecord.js'),
+      sub('src/submodule/%s.NdefMessage.js')
     ];
 
   var DIST_HEAD_LIST = [

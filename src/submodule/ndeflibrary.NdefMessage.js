@@ -392,8 +392,5 @@ function initLibraryNdefMessage (context) {
 
         return m;
   	};
-
-  
-
   
 }

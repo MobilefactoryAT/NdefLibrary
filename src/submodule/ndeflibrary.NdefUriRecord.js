@@ -45,7 +45,7 @@ function initLibraryNdefUriRecord (context) {
     /// This record can either be used stand alone, or as part of another record
     /// like the Smart Poster (<see cref="NdefSpRecord"/>).
     /// </remarks>
-	var ndefUriRecord = NdefLibrary.NdefUriRecord = function() {
+	var ndefUriRecord = NdefLibrary.NdefUriRecord = function(opt_config) {
 		
 		/// <summary>
         /// Get the raw URI as stored in this record, excluding any abbreviations.
@@ -71,10 +71,17 @@ function initLibraryNdefUriRecord (context) {
         /// </remarks>
 		this.Uri = "";
   		
-  		/// <summary>
-        /// Create an empty URI record.
-        /// </summary>
-        NdefLibrary.NdefRecord.call(this, NdefLibrary.NdefRecord.TypeNameFormatType.NfcRtd, NdefLibrary.NdefUriRecord.UriType);
+  		
+  		///Constructors
+		if (arguments.length == 1) {
+			NdefLibrary.NdefRecord.call(this, arguments[0]);
+		} 
+		else {
+	  		/// <summary>
+	        /// Create an empty URI record.
+	        /// </summary>
+	        NdefLibrary.NdefRecord.call(this, NdefLibrary.NdefRecord.TypeNameFormatType.NfcRtd, NdefLibrary.NdefUriRecord.UriType);
+		}
 	};
 	
 	
@@ -204,7 +211,7 @@ function initLibraryNdefUriRecord (context) {
   	
   	ndefUriRecord.prototype.getUri = function(value){
   		var Payload = this.getPayload();
-  		if (Payload == null || Payload.Length == 0){
+  		if (Payload == null || Payload.length == 0){
             return "";
         }
         

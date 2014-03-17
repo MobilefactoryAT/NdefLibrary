@@ -181,6 +181,660 @@ function initLibraryModule (context) {
 **
 ****************************************************************************/
 
+function initLibraryNdefAndroidAppRecord (context) {
+	'use strict';
+
+	var NdefLibrary = context.NdefLibrary;
+  
+
+	/// <summary>
+    /// Creates the Android-specific Android Application Record.
+    /// </summary>
+    /// <remarks>
+    /// Through specifying the package name, this record directly launches an
+    /// app on an Android phone (4.0+). If the app isn't installed on the phone,
+    /// it will open the store and search for the app.
+    /// 
+    /// To pass custom data to the app, you would typically add other records
+    /// to the NDEF message.
+    /// 
+    /// If creating a multi-record NDEF message, it's recommended to put this
+    /// record to the end of the message.
+    /// </remarks>
+    /// <seealso cref="http://developer.android.com/guide/topics/connectivity/nfc/nfc.html#aar"/>
+	var ndefAndroidAppRecord = NdefLibrary.NdefAndroidAppRecord = function(opt_config) {
+		
+		/// <summary>
+        /// Name of the android package.
+        /// </summary>
+		this.packageName = "";
+		
+		
+		///Constructors
+		if (arguments.length == 1) {
+			NdefLibrary.NdefRecord.call(this, arguments[0]);
+			
+			if (!NdefLibrary.NdefAndroidAppRecord.isRecordType(this))
+                throw "NdefException(NdefExceptionMessages.ExInvalidCopy)";
+		} 
+		else {
+	  		/// <summary>
+	        /// Create an empty Android Application Record.
+	        /// </summary>
+	        NdefLibrary.NdefRecord.call(this, NdefLibrary.NdefRecord.TypeNameFormatType.ExternalRtd, NdefLibrary.NdefAndroidAppRecord.AndroidAppRecordType);
+		}
+		
+	};
+	
+	
+  	/// <summary>
+    /// Type name for the Android Application Record (TNF = External RTD)
+    /// </summary>
+  	NdefLibrary.NdefAndroidAppRecord.AndroidAppRecordType = "android.com:pkg".getBytes();
+
+	//Derive from NdefRecord
+	ndefAndroidAppRecord.prototype = new NdefLibrary.NdefRecord();
+	ndefAndroidAppRecord.prototype.constructor = NdefLibrary.NdefAndroidAppRecord;
+	
+	
+	/// <summary>
+    /// Checks if the record sent via the parameter is indeed an Android
+    /// Application Record.
+    /// Only checks the type and type name format, doesn't analyze if the
+    /// payload is valid.
+    /// </summary>
+    /// <param name="record">Record to check.</param>
+    /// <returns>True if the record has the correct type and type name format
+    /// to be an Android Application Record, false if it's a different record.</returns>
+    NdefLibrary.NdefAndroidAppRecord.isRecordType = function(record){
+        if (record.getType() == null || record.getType().length == 0) return false;
+        return (record.getTypeNameFormat() == NdefLibrary.NdefRecord.TypeNameFormatType.ExternalRtd && arraysEqual(record.getType(),NdefLibrary.NdefAndroidAppRecord.AndroidAppRecordType));
+    };
+
+	ndefAndroidAppRecord.prototype.setPackageName = function(value){
+		if (value == null){
+            this.setPayload(null);
+            return;
+        }
+        var encodedString = encodeURI(value);
+        var encodedStringArray = encodedString.getBytes();
+        this.setPayload(encodedStringArray);
+  	};
+  	
+  	ndefAndroidAppRecord.prototype.getPackageName = function(value){
+		
+		if (this.getPayload() == null || this.getPayload().length == 0){
+			return "";
+        }
+        
+        return decodeURI(fromArray(this.getPayload()));
+  	};
+  
+}
+/****************************************************************************
+**
+** Copyright (C) 2012-2014 Sebastian Höbarth, http://www.mobilefactory.at/
+** Original version copyright (C) 2012 Nokia Corporation and/or its subsidiary(-ies).
+** All rights reserved.
+**
+** This file is based on the respective class of the Connectivity module
+** of Qt Mobility (http://qt.gitorious.org/qt-mobility).
+**
+** Ported to Javascript by Sebastian Höbarth (2014)
+** More information: http://ndef.codeplex.com/
+**
+** GNU Lesser General Public License Usage
+** This file may be used under the terms of the GNU Lesser General Public
+** License version 2.1 as published by the Free Software Foundation and
+** appearing in the file LICENSE.LGPL included in the packaging of this
+** file. Please review the following information to ensure the GNU Lesser
+** General Public License version 2.1 requirements will be met:
+** http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html.
+**
+** GNU General Public License Usage
+** Alternatively, this file may be used under the terms of the GNU General
+** Public License version 3.0 as published by the Free Software Foundation
+** and appearing in the file LICENSE.GPL included in the packaging of this
+** file. Please review the following information to ensure the GNU General
+** Public License version 3.0 requirements will be met:
+** http://www.gnu.org/copyleft/gpl.html.
+**
+****************************************************************************/
+
+function initLibraryNdefSocialRecord (context) {
+	'use strict';
+
+	var NdefLibrary = context.NdefLibrary;
+  
+  
+  	/// <summary>
+    /// Link to one of the supported social networks by
+    /// simply selecting the network and specifying the username.
+    /// </summary>
+    /// <remarks>
+    /// Tapping a tag written with this record type will take
+    /// the user to the social network web site, where he can then
+    /// for example start following you on Twitter.
+    /// 
+    /// As this class is based on the Smart URI base class, the
+    /// payload is formatted as a URI record initially. When first
+    /// adding Smart Poster information (like a title), the payload
+    /// instantly transforms into a Smart Poster.
+    /// </remarks>
+	var ndefSocialRecord = NdefLibrary.NdefSocialRecord = function(opt_config) {
+		
+		/// <summary>
+        /// Username / id of the social network.
+        /// </summary>
+  		this.socialUserName = "";
+  		
+  		/// <summary>
+        /// Format to use for encoding the social network URL.
+        /// </summary>
+  		this.socialType = NdefLibrary.NdefSocialRecord.NfcSocialType.Twitter;
+  		
+  		///Constructors
+		if (arguments.length == 1) {
+			NdefLibrary.NdefUriRecord.call(this, arguments[0]);
+		} 
+		else {
+	        NdefLibrary.NdefUriRecord.call(this);
+		}
+	};
+	
+	//Derive from NdefUriRecord
+	ndefSocialRecord.prototype = new NdefLibrary.NdefUriRecord();
+	ndefSocialRecord.prototype.constructor = NdefLibrary.NdefSocialRecord;
+	
+  	/// <summary>
+    /// List of social networks this class can be used to generate a link for.
+    /// </summary>
+  	NdefLibrary.NdefSocialRecord.NfcSocialType = {
+	    Twitter : 0,
+        LinkedIn : 1,
+        Facebook : 2,
+        Xing : 3,
+        VKontakte : 4,
+        FoursquareWeb : 5,
+        FoursquareApp : 6,
+        Skype : 7,
+        GooglePlus : 8
+	};
+	
+	/// <summary>
+    /// Supported social network types and the respective format strings to create the URIs.
+    /// </summary>
+	NdefLibrary.NdefSocialRecord.SocialTagTypeUris = [
+	    "http://twitter.com/{0}",
+        "http://linkedin.com/in/{0}",
+        "http://facebook.com/{0}",
+        "http://xing.com/profile/{0}",
+        "http://vkontakte.ru/{0}",
+        "http://m.foursquare.com/v/{0}",
+        "foursquare://venues/{0}",
+        "skype:{0}?call",
+        "https://plus.google.com/{0}"
+	];
+	
+	
+	/// <summary>
+    /// Format the URI of the SmartUri base class.
+    /// </summary>
+	ndefSocialRecord.prototype.updatePayload = function(){
+		var base = NdefLibrary.NdefSocialRecord.SocialTagTypeUris[this.socialType];
+		var Uri = String.format(base, this.socialUserName);
+		this.setUri(Uri);
+    };
+    
+    /// <summary>
+    /// Checks if the contents of the record are valid; throws an exception if
+    /// a problem is found, containing a textual description of the issue.
+    /// </summary>
+    /// <exception cref="NdefException">Thrown if no valid NDEF record can be
+    /// created based on the record's current contents. The exception message 
+    /// contains further details about the issue.</exception>
+    /// <returns>True if the record contents are valid, or throws an exception
+    /// if an issue is found.</returns>
+	ndefSocialRecord.checkIfValid = function(){
+		
+		 // First check the basics
+        if (!NdefLibrary.NdefUriRecord.prototype.checkIfValid()) return false;
+
+        // Check specific content of this record
+        if (this.socialUserName == null || this.socialUserName.length == 0){
+            throw new "NdefException(NdefExceptionMessages.ExTelNumberEmpty)";
+        }
+        
+        return true;
+    };
+  	
+  	ndefSocialRecord.prototype.getSocialUserName = function(){
+		return this.socialUserName;
+  	};
+  	
+  	ndefSocialRecord.prototype.setSocialUserName = function(value){
+		this.socialUserName = value;
+		this.updatePayload();
+  	};
+  	
+  	ndefSocialRecord.prototype.getSocialType = function(){
+		return this.socialType;
+  	};
+  	
+  	ndefSocialRecord.prototype.setSocialType = function(value){
+		this.socialType = value;
+		this.updatePayload();
+  	};
+	
+
+}
+/****************************************************************************
+**
+** Copyright (C) 2012-2014 Sebastian Höbarth, http://www.mobilefactory.at/
+** Original version copyright (C) 2012 Nokia Corporation and/or its subsidiary(-ies).
+** All rights reserved.
+**
+** This file is based on the respective class of the Connectivity module
+** of Qt Mobility (http://qt.gitorious.org/qt-mobility).
+**
+** Ported to Javascript by Sebastian Höbarth (2014)
+** More information: http://ndef.codeplex.com/
+**
+** GNU Lesser General Public License Usage
+** This file may be used under the terms of the GNU Lesser General Public
+** License version 2.1 as published by the Free Software Foundation and
+** appearing in the file LICENSE.LGPL included in the packaging of this
+** file. Please review the following information to ensure the GNU Lesser
+** General Public License version 2.1 requirements will be met:
+** http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html.
+**
+** GNU General Public License Usage
+** Alternatively, this file may be used under the terms of the GNU General
+** Public License version 3.0 as published by the Free Software Foundation
+** and appearing in the file LICENSE.GPL included in the packaging of this
+** file. Please review the following information to ensure the GNU General
+** Public License version 3.0 requirements will be met:
+** http://www.gnu.org/copyleft/gpl.html.
+**
+****************************************************************************/
+
+function initLibraryNdefGeoRecord (context) {
+	'use strict';
+
+	var NdefLibrary = context.NdefLibrary;
+  
+  
+  	/// <summary>
+    /// Store longitude and latitude on a tag, to allow the user
+    /// to view a map when tapping the tag.
+    /// </summary>
+    /// <remarks>
+    /// Geo tags are not standardized by the NFC forum, therefore,
+    /// this class supports three different types of writing the location
+    /// to a tag.
+    /// 
+    /// * GeoUri: write URI based on the "geo:" URI scheme, as specified
+    /// by RFC5870, available at: http://geouri.org/
+    /// 
+    /// * BingMaps: Uses the URI scheme defined by the Maps application
+    /// on Windows 8.
+    /// 
+    /// * DriveTo / WalkTo: URI schemes supported by Windows Phone 8 and
+    /// used in apps to launch an installed navigation app to navigate
+    /// to a specified position. An app to handle DriveTo request should
+    /// be present by default on all WP8 phones; WalkTo not necessarily.
+    /// 
+    /// * NokiaMapsUri: write URI based on a Nokia Maps link, following the
+    /// "http://m.ovi.me/?c=..." scheme of the Nokia/Ovi Maps Rendering API.
+    /// Depending on the target device, the phone / web service should then
+    /// redirect to the best maps representation.
+    /// On Symbian, the phone will launch the Nokia Maps client. On a
+    /// desktop computer, the full Nokia Maps web experience will open.
+    /// On other phones, the HTML 5 client may be available.
+    /// 
+    /// * WebRedirect: uses the web service at NfcInteractor.com to
+    /// check the OS of the phone, and then redirect to the best way
+    /// of showing maps to the user.
+    /// Note the limitations and terms of use of the web service. For
+    /// real world deployment, outside of development and testing, it's
+    /// recommended to host the script on your own web server.
+    /// Find more information at nfcinteractor.com.
+    /// 
+    /// As this class is based on the Smart URI base class, the
+    /// payload is formatted as a URI record initially. When first
+    /// adding Smart Poster information (like a title), the payload
+    /// instantly transforms into a Smart Poster.
+    /// </remarks>
+	var ndefGeoRecord = NdefLibrary.NdefGeoRecord = function(opt_config) {
+		
+  		/// <summary>
+        /// Longitude of the coordinate to encode in the Geo URI.
+        /// </summary>
+  		this.Longitude = "";
+  		
+  		/// <summary>
+        /// Latitude of the coordinate to encode in the Geo URI.
+        /// </summary>
+  		this.Latitude = "";
+  		
+  		/// <summary>
+        /// Format to use for encoding the coordinate into a URI.
+        /// </summary>
+  		this._geoType = "";
+
+
+  		///Constructors
+		if (arguments.length == 1) {
+			NdefLibrary.NdefUriRecord.call(this, arguments[0]);
+		} 
+		else {
+	        NdefLibrary.NdefUriRecord.call(this);
+		}
+	};
+	
+	//Derive from NdefUriRecord
+	ndefGeoRecord.prototype = new NdefLibrary.NdefUriRecord();
+	ndefGeoRecord.prototype.constructor = NdefLibrary.NdefGeoRecord;
+	
+  	/// <summary>
+    /// Format of the URI on the geo tag.
+    /// </summary>
+  	NdefLibrary.NdefGeoRecord.NfcGeoType = {
+  		/// <summary>
+        /// Geo URI scheme, as defined in RFC 5870 (http://tools.ietf.org/html/rfc5870).
+        /// </summary>
+	    GeoUri : 0,
+	    /// <summary>
+        /// Bing Maps URI scheme, used for Maps on Windows 8 (http://msdn.microsoft.com/en-us/library/windows/apps/jj635237.aspx)
+        /// </summary>
+        BingMaps : 1,
+        /// <summary>
+        /// Nokia Maps HTTP URL to show maps in the browser.
+        /// </summary>
+        NokiaMapsUri : 2,
+        /// <summary>
+        /// Web redirection script that uses the appropriate URI format depending on the browser's user agent.
+        /// </summary>
+        WebRedirect : 3,
+        /// <summary>
+        /// Drive-to URI scheme for Windows Phone 8 (http://msdn.microsoft.com/en-us/library/windowsphone/develop/jj710324%28v=vs.105%29.aspx)
+        /// </summary>
+        MsDriveTo : 4,
+        /// <summary>
+        /// Walk-to URI scheme for Windows Phone 8 (http://msdn.microsoft.com/en-us/library/windowsphone/develop/jj710324%28v=vs.105%29.aspx)
+        /// </summary>
+        MsWalkTo : 5
+	};
+	
+	/// <summary>
+    /// Default URIs for the different formats to store the geo tag.
+    /// </summary>
+    /// <remarks>
+    /// URI that will be used for this record. Parameter {0} will be replaced with
+    /// the latitude, {1} with the longitude.
+    /// </remarks>
+	NdefLibrary.NdefSocialRecord.GeoTagTypeUris = [
+	    "geo:{0},{1}",
+	    "bingmaps:?cp={0}~{1}",
+	    "http://m.ovi.me/?c={0},{1}",
+	    "http://NfcInteractor.com/m?c={0},{1}",
+	    "ms-drive-to:?destination.latitude={0}&destination.longitude={1}",
+	    "ms-walk-to:?destination.latitude={0}&destination.longitude={1}"
+	];
+	
+	/// <summary>
+    /// Format the URI of the SmartUri base class.
+    /// </summary>
+	ndefGeoRecord.prototype.updatePayload = function(){
+		if (this.Latitude == null || this.Latitude.length == 0){
+			if (this.Longitude == null || this.Longitude.length == 0){
+				return;
+			} 
+		} 
+		
+		var base = NdefLibrary.NdefSocialRecord.GeoTagTypeUris[GeoType];
+		
+        // Make sure we always use the "en" culture to have "." as the decimal separator.
+        var Uri = string.Format(base, Latitude, Longitude);
+        this.setUri(Uri);
+    };
+    
+  	ndefGeoRecord.prototype.getLatitude = function(){
+		return this.Latitude;
+  	};
+  	
+  	ndefGeoRecord.prototype.setLatitude = function(value){
+		this.Latitude = value;
+		this.updatePayload();
+  	};
+    
+  	ndefGeoRecord.prototype.getLongitude = function(){
+		return this.Longitude;
+  	};
+  	
+  	ndefGeoRecord.prototype.setLongitude = function(value){
+		this.Longitude = value;
+		this.updatePayload();
+  	};
+  	
+  	ndefGeoRecord.prototype.getGeoType = function(){
+		return this._geoType;
+  	};
+  	
+  	ndefGeoRecord.prototype.setGeoType = function(value){
+		this._geoType = value;
+		this.updatePayload();
+  	};
+	
+
+}
+/****************************************************************************
+**
+** Copyright (C) 2012-2014 Sebastian Höbarth, http://www.mobilefactory.at/
+** Original version copyright (C) 2012 Nokia Corporation and/or its subsidiary(-ies).
+** All rights reserved.
+**
+** This file is based on the respective class of the Connectivity module
+** of Qt Mobility (http://qt.gitorious.org/qt-mobility).
+**
+** Ported to Javascript by Sebastian Höbarth (2014)
+** More information: http://ndef.codeplex.com/
+**
+** GNU Lesser General Public License Usage
+** This file may be used under the terms of the GNU Lesser General Public
+** License version 2.1 as published by the Free Software Foundation and
+** appearing in the file LICENSE.LGPL included in the packaging of this
+** file. Please review the following information to ensure the GNU Lesser
+** General Public License version 2.1 requirements will be met:
+** http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html.
+**
+** GNU General Public License Usage
+** Alternatively, this file may be used under the terms of the GNU General
+** Public License version 3.0 as published by the Free Software Foundation
+** and appearing in the file LICENSE.GPL included in the packaging of this
+** file. Please review the following information to ensure the GNU General
+** Public License version 3.0 requirements will be met:
+** http://www.gnu.org/copyleft/gpl.html.
+**
+****************************************************************************/
+
+function initLibraryNdefTelRecord (context) {
+	'use strict';
+
+	var NdefLibrary = context.NdefLibrary;
+  
+  
+  	/// <summary>
+    /// Convenience class for formatting telephone call information into
+    /// an NDEF record, depending on added info either URI or Smart Poster.
+    /// </summary>
+    /// <remarks>
+    /// Tapping a tag with telephone information stored on it should trigger
+    /// a dialog in the phone to call the specified number. This can for
+    /// example be used to get in touch with customer service or support,
+    /// or to book a hotel.
+    /// 
+    /// To create and write the record, specify the target phone number
+    /// (in international format). This class will take care of properly
+    /// encoding the information.
+    /// 
+    /// As this class is based on the Smart URI base class, the
+    /// payload is formatted as a URI record initially.
+    /// </remarks>
+	var ndefTelRecord = NdefLibrary.NdefTelRecord = function(opt_config) {
+		
+		/// <summary>
+        /// The number the reading phone is supposed to call.
+        /// Recommended to store in international format, e.g., +431234...
+        /// </summary>
+  		this.telNumber = "";
+  		
+  		///Constructors
+		if (arguments.length == 1) {
+			/// <summary>
+	        /// Create a telephone record based on another telephone record, or Smart Poster / URI
+	        /// record that have a Uri set that corresponds to the tel: URI scheme.
+	        /// </summary>
+	        /// <param name="other">Other record to copy the data from.</param>
+			NdefLibrary.NdefUriRecord.call(this, arguments[0]);
+			this.parseUriToData(this.getUri());
+		} 
+		else {
+			/// <summary>
+	        /// Create an empty telephone record. You need to set the number 
+	        /// to create a URI and make this record valid.
+	        /// </summary>
+	        NdefLibrary.NdefUriRecord.call(this);
+		}
+	};
+	
+  	/// <summary>
+    /// URI scheme in use for this record.
+    /// </summary>
+  	NdefLibrary.NdefTelRecord.TelScheme = "tel:"; 
+  	
+	//Derive from NdefRecord
+	ndefTelRecord.prototype = new NdefLibrary.NdefUriRecord();
+	ndefTelRecord.prototype.constructor = NdefLibrary.NdefTelRecord;
+	
+	/// <summary>
+    /// Checks if the record sent via the parameter is indeed an Sms record.
+    /// Checks the type and type name format and if the URI starts with the correct scheme.
+    /// </summary>
+    /// <param name="record">Record to check.</param>
+    /// <returns>True if the record has the correct type, type name format and payload
+    /// to be an Sms record, false if it's a different record.</returns>
+	NdefLibrary.NdefTelRecord.isRecordType = function(record){
+		
+		if (record.getType() == null || record.getType().length == 0) return false;
+		
+        if (record.getTypeNameFormat() == NdefLibrary.NdefRecord.TypeNameFormatType.NfcRtd && record.getPayload() != null)
+        {
+            if (arraysEqual(record.getType(), NdefLibrary.NdefUriRecord.UriType))
+            {
+                var testRecord = new NdefLibrary.NdefUriRecord(record);
+                return testRecord.getUri().startsWith(NdefLibrary.NdefTelRecord.TelScheme);
+            }
+            //TODO SmartPosterType?
+            // if (arraysEqual(record.getType(), NdefLibrary.NdefRecord.NdefUriRecord.SmartPosterType))
+            // {
+                // var testRecord = new NdefSpRecord(record);
+                // return testRecord.Uri.StartsWith(TelScheme);
+            // }
+        }
+        return false;
+    };
+    
+    /// <summary>
+    /// Checks if the contents of the record are valid; throws an exception if
+    /// a problem is found, containing a textual description of the issue.
+    /// </summary>
+    /// <exception cref="NdefException">Thrown if no valid NDEF record can be
+    /// created based on the record's current contents. The exception message 
+    /// contains further details about the issue.</exception>
+    /// <returns>True if the record contents are valid, or throws an exception
+    /// if an issue is found.</returns>
+	ndefTelRecord.checkIfValid = function(){
+		
+		 // First check the basics
+        if (!NdefLibrary.NdefUriRecord.prototype.checkIfValid()) return false;
+
+        // Check specific content of this record
+        if (this.telNumber == null || this.telNumber.length == 0){
+            throw new "NdefException(NdefExceptionMessages.ExTelNumberEmpty)";
+        }
+        
+        return true;
+    };
+
+	ndefTelRecord.prototype.getTelNumber = function(){
+		return this.telNumber;
+  	};
+  	
+  	ndefTelRecord.prototype.setTelNumber = function(value){
+		this.telNumber = value;
+		this.updatePayload();
+  	};
+  	
+  	/// <summary>
+    /// Deletes any details currently stored in the telephone record 
+    /// and re-initializes them by parsing the contents of the provided URI.
+    /// </summary>
+    /// <remarks>The URI has to be formatted according to the tel: URI scheme,
+    /// and include the number.</remarks>
+  	ndefTelRecord.prototype.parseUriToData = function(uri){
+  		// Extract product name and serial number from the payload
+        // var pattern = new RegExp("tel:(?<telNumber>.*)");
+        // var match = pattern.exec(uri);
+        // console.log("match: "+match);
+        // // Assign extracted data to member variables
+        // _telNumber = match.Groups["telNumber"].Value;
+        
+        var tel = uri.replace("tel:","");
+        this.telNumber = tel;
+        this.updatePayload();
+  	};
+  	
+  	/// <summary>
+    /// Format the URI of the SmartUri base class.
+    /// </summary>
+  	ndefTelRecord.prototype.updatePayload = function(){
+		if (this.telNumber != null && this.telNumber.length > 0){
+			this.setUri(NdefLibrary.NdefTelRecord.TelScheme + this.telNumber);
+		}
+  	};
+
+}
+/****************************************************************************
+**
+** Copyright (C) 2012-2014 Sebastian Höbarth, http://www.mobilefactory.at/
+** Original version copyright (C) 2012 Nokia Corporation and/or its subsidiary(-ies).
+** All rights reserved.
+**
+** This file is based on the respective class of the Connectivity module
+** of Qt Mobility (http://qt.gitorious.org/qt-mobility).
+**
+** Ported to Javascript by Sebastian Höbarth (2014)
+** More information: http://ndef.codeplex.com/
+**
+** GNU Lesser General Public License Usage
+** This file may be used under the terms of the GNU Lesser General Public
+** License version 2.1 as published by the Free Software Foundation and
+** appearing in the file LICENSE.LGPL included in the packaging of this
+** file. Please review the following information to ensure the GNU Lesser
+** General Public License version 2.1 requirements will be met:
+** http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html.
+**
+** GNU General Public License Usage
+** Alternatively, this file may be used under the terms of the GNU General
+** Public License version 3.0 as published by the Free Software Foundation
+** and appearing in the file LICENSE.GPL included in the packaging of this
+** file. Please review the following information to ensure the GNU General
+** Public License version 3.0 requirements will be met:
+** http://www.gnu.org/copyleft/gpl.html.
+**
+****************************************************************************/
+
 function initLibraryNdefUriRecord (context) {
 	'use strict';
 
@@ -198,7 +852,7 @@ function initLibraryNdefUriRecord (context) {
     /// This record can either be used stand alone, or as part of another record
     /// like the Smart Poster (<see cref="NdefSpRecord"/>).
     /// </remarks>
-	var ndefUriRecord = NdefLibrary.NdefUriRecord = function() {
+	var ndefUriRecord = NdefLibrary.NdefUriRecord = function(opt_config) {
 		
 		/// <summary>
         /// Get the raw URI as stored in this record, excluding any abbreviations.
@@ -224,10 +878,17 @@ function initLibraryNdefUriRecord (context) {
         /// </remarks>
 		this.Uri = "";
   		
-  		/// <summary>
-        /// Create an empty URI record.
-        /// </summary>
-        NdefLibrary.NdefRecord.call(this, NdefLibrary.NdefRecord.TypeNameFormatType.NfcRtd, NdefLibrary.NdefUriRecord.UriType);
+  		
+  		///Constructors
+		if (arguments.length == 1) {
+			NdefLibrary.NdefRecord.call(this, arguments[0]);
+		} 
+		else {
+	  		/// <summary>
+	        /// Create an empty URI record.
+	        /// </summary>
+	        NdefLibrary.NdefRecord.call(this, NdefLibrary.NdefRecord.TypeNameFormatType.NfcRtd, NdefLibrary.NdefUriRecord.UriType);
+		}
 	};
 	
 	
@@ -357,7 +1018,7 @@ function initLibraryNdefUriRecord (context) {
   	
   	ndefUriRecord.prototype.getUri = function(value){
   		var Payload = this.getPayload();
-  		if (Payload == null || Payload.Length == 0){
+  		if (Payload == null || Payload.length == 0){
             return "";
         }
         
@@ -487,7 +1148,7 @@ function initLibraryNdefRecord (context) {
 		  	}
 			
 		  	if(other.getPayload() != null){
-		  		this.setId(other.getPayload());
+		  		this.setPayload(other.getPayload());
 		  	}
 		
 		  	this._typeNameFormat = other.getTypeNameFormat();
@@ -1040,9 +1701,6 @@ function initLibraryNdefMessage (context) {
 
         return m;
   	};
-
-  
-
   
 }
 /****************************************************************************
@@ -1091,6 +1749,11 @@ var initNdefLibrary = function (context) {
   initLibraryNdefMessage(context);
   
   initLibraryNdefUriRecord(context);
+  initLibraryNdefAndroidAppRecord(context);
+  initLibraryNdefTelRecord(context);
+  initLibraryNdefSocialRecord(context);
+  initLibraryNdefGeoRecord(context);
+  
   
   return context.NdefLibrary;
 };

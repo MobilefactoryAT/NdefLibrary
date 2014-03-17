@@ -44,6 +44,11 @@ var initNdefLibrary = function (context) {
   initLibraryNdefMessage(context);
   
   initLibraryNdefUriRecord(context);
+  initLibraryNdefAndroidAppRecord(context);
+  initLibraryNdefTelRecord(context);
+  initLibraryNdefSocialRecord(context);
+  initLibraryNdefGeoRecord(context);
+  
   
   return context.NdefLibrary;
 };

@@ -98,6 +98,22 @@ const arraysEqual = function(a, b) {
   return true;
 };
 
+const getHexString = function(value) {
+	if(value != null){
+		if(value.length <= 1){
+			return value.toString(16);
+		}else{
+			var output = "";
+			for (var i=0; i < value.length; i++) {
+			  if(i == value.length-1) output += "0x"+value[i].toString(16).toUpperCase();
+			  else output += "0x"+value[i].toString(16).toUpperCase()+",";
+			};
+			return output;
+		}
+	}	
+	return "";
+};
+
 //String extensions
 String.prototype.startsWith = function (str){
     return this.slice(0, str.length) == str;
@@ -110,6 +126,15 @@ String.prototype.getBytes = function () {
   }
   return bytes;
 };
+
+String.format = function() {
+      var s = arguments[0];
+      for (var i = 0; i < arguments.length - 1; i++) {       
+          var reg = new RegExp("\\{" + i + "\\}", "gm");             
+          s = s.replace(reg, arguments[i + 1]);
+      }
+      return s;
+ };
 
 const fromArray = function(array) {
   var result = "";

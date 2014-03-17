@@ -108,7 +108,7 @@ function initLibraryNdefRecord (context) {
 		  	}
 			
 		  	if(other.getPayload() != null){
-		  		this.setId(other.getPayload());
+		  		this.setPayload(other.getPayload());
 		  	}
 		
 		  	this._typeNameFormat = other.getTypeNameFormat();

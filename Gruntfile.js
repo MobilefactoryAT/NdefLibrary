@@ -17,6 +17,10 @@ module.exports = function(grunt) {
   // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
   var MODULE_LIST = [
       sub('src/%s.module.js'),
+      sub('src/submodule/%s.NdefAndroidAppRecord.js'),
+      sub('src/submodule/%s.NdefSocialRecord.js'),
+      sub('src/submodule/%s.NdefGeoRecord.js'),
+      sub('src/submodule/%s.NdefTelRecord.js'),
       sub('src/submodule/%s.NdefUriRecord.js'),
       sub('src/submodule/%s.NdefRecord.js'),
       sub('src/submodule/%s.NdefMessage.js')

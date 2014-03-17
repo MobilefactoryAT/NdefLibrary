@@ -11,8 +11,12 @@
   <script src="../src/ndeflibrary.core.js"></script>
   <script src="../src/ndeflibrary.module.js"></script>
   <script src="../src/submodule/ndeflibrary.NdefRecord.js"></script>
+  <script src="../src/submodule/ndeflibrary.NdefAndroidAppRecord.js"></script>
   <script src="../src/submodule/ndeflibrary.NdefMessage.js"></script>
   <script src="../src/submodule/ndeflibrary.NdefUriRecord.js"></script>
+  <script src="../src/submodule/ndeflibrary.NdefTelRecord.js"></script>
+  <script src="../src/submodule/ndeflibrary.NdefGeoRecord.js"></script>
+  <script src="../src/submodule/ndeflibrary.NdefSocialRecord.js"></script>
   <script src="../src/ndeflibrary.init.js"></script>
   <script>
   </script>
@@ -64,6 +68,11 @@
         var uri = "https://www.mobilefactory.at";
         ndefUriRecord.setUri(uri);
         
+        //Print
+        // var m = new NdefLibrary.NdefMessage();
+        // m.push(ndefUriRecord);
+        // console.log(getHexString(m.toByteArray()));
+        
         var uri2 = ndefUriRecord.getUri();
         
         deepEqual(uri2, uri);
@@ -101,6 +110,17 @@
         deepEqual(NdefLibrary.NdefUriRecord.isRecordType(ndefUriRecord),true);
         deepEqual(NdefLibrary.NdefUriRecord.isRecordType(new NdefLibrary.NdefRecord()), false);
         
+     });
+     
+	test('NdefUriRecrod Message envelope', function() {
+     	
+     	var uri = "http://www.mobilefactory.at";
+        var ndefUriRecord = new NdefLibrary.NdefUriRecord();
+        ndefUriRecord.setUri(uri);
+        var ndefMessage = new NdefLibrary.NdefMessage(ndefUriRecord);
+        // console.log(ndefMessage.toByteArray());
+        
+        deepEqual(ndefMessage.toByteArray(), [209, 1, 17, 85, 1, 109, 111, 98, 105, 108, 101, 102, 97, 99, 116, 111, 114, 121, 46, 97, 116]);
      });
 
 

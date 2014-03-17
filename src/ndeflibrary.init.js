@@ -43,6 +43,8 @@ var initNdefLibrary = function (context) {
   initLibraryNdefRecord(context);
   initLibraryNdefMessage(context);
   
+  initLibraryNdefUriRecord(context);
+  
   return context.NdefLibrary;
 };
 

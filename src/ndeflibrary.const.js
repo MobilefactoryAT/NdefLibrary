@@ -70,3 +70,54 @@ const addToArray = function(array, content) {
 };
 
 
+const getEncodeURILength = function(countMe) {
+	var escapedStr = encodeURI(countMe);
+	if (escapedStr.indexOf("%") != -1) {
+	    var count = escapedStr.split("%").length - 1;
+	    if (count == 0) count++; //perverse case; can't happen with real UTF-8
+	    var tmp = escapedStr.length - (count * 3);
+	    count = count + tmp;
+	} else {
+	    count = escapedStr.length;
+	}
+	// console.log(escapedStr + ": size is " + count);
+	return count;
+};
+
+const arraysEqual = function(a, b) {
+  if (a === b) return true;
+  if (a == null || b == null) return false;
+  if (a.length != b.length) return false;
+
+  // If you don't care about the order of the elements inside
+  // the array, you should sort both arrays here.
+
+  for (var i = 0; i < a.length; ++i) {
+    if (a[i] !== b[i]) return false;
+  }
+  return true;
+};
+
+//String extensions
+String.prototype.startsWith = function (str){
+    return this.slice(0, str.length) == str;
+  };
+  
+String.prototype.getBytes = function () {
+  var bytes = [];
+  for (var i = 0; i < this.length; ++i) {
+    bytes.push(this.charCodeAt(i));
+  }
+  return bytes;
+};
+
+const fromArray = function(array) {
+  var result = "";
+  for (var i = 0; i < array.length; i++) {
+    result += String.fromCharCode(parseInt(array[i]));
+  }
+  return result;
+};
+  
+
+

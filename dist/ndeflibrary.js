@@ -526,6 +526,8 @@ function initLibraryNdefGeoRecord (context) {
   		///Constructors
 		if (arguments.length == 1) {
 			NdefLibrary.NdefUriRecord.call(this, arguments[0]);
+			this.updatePayload();
+			//TODO get Latitude and longitude from URI
 		} 
 		else {
 	        NdefLibrary.NdefUriRecord.call(this);
@@ -592,10 +594,10 @@ function initLibraryNdefGeoRecord (context) {
 			} 
 		} 
 		
-		var base = NdefLibrary.NdefSocialRecord.GeoTagTypeUris[GeoType];
+		var base = NdefLibrary.NdefSocialRecord.GeoTagTypeUris[this.getGeoType()];
 		
         // Make sure we always use the "en" culture to have "." as the decimal separator.
-        var Uri = string.Format(base, Latitude, Longitude);
+        var Uri = String.format(base, this.Latitude, this.Longitude);
         this.setUri(Uri);
     };
     

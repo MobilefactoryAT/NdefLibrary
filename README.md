@@ -30,24 +30,40 @@ Integrate the library into your Javascript project using npm.
 - Supports fully standardized basic record types:
   - Smart Poster, URI, Text records 
 - Smart URI class: automatically represents itself as the smallest possible NDEF type (URI or Smart Poster), depending on supplied data 
-- Convenience classes for: 
-  - LaunchApp tags - launch a Windows (Phone) app just by tapping a tag
-  - Nokia Accessories tags - let the user choose an app to launch on his Nokia Lumia Windows Phone 8 device
-  - WpSettings tags - launch a settings page on Windows Phone 8 (e.g., Bluetooth settings, flight mode). Actually modifying these settings is not allowed by the security model of Windows Phone
-  - Android Application Record (AAR) tags - launch an Android app by tapping a tag
-  - Geo tags - longitude & latitude of a place, using different Geo URI schemes (more details) 
-  - Social tags - linking to social networks like Twitter, Facebook, Foursquare or Skype 
-  - SMS tags - defining number and body of the message
-  - Mailto tags - sending email messages with recipient address and optional subject and body
-  - Telephone call tags - defining the number to call
-  - NearSpeak tags - store voice messages on NFC tags, using the custom URI scheme as defined by the NearSpeak app: http://www.nearspeak.at/
 - Records check their contents for validity according to standards
 - Can throw NdefException in case of content validity issues, with translatable messages defined in a resource file
 - Fully documented source code, following Doxygen standards
+- Convenience classes for: 
+  - Android Application Record (AAR) tags - launch an Android app by tapping a tag
+  - Geo tags - longitude & latitude of a place, using different Geo URI schemes (more details) 
+  - Social tags - linking to social networks like Twitter, Facebook, Foursquare or Skype 
+  - Telephone call tags - defining the number to call
+  
+#####(Not included in this version)
+  - Mailto tags - sending email messages with recipient address and optional subject and body
+  - SMS tags - defining number and body of the message
+  - LaunchApp tags - launch a Windows (Phone) app just by tapping a tag
+  - Nokia Accessories tags - let the user choose an app to launch on his Nokia Lumia Windows Phone 8 device
+  - WpSettings tags - launch a settings page on Windows Phone 8 (e.g., Bluetooth settings, flight mode). Actually modifying these settings is not allowed by the security model of Windows Phone
+  - NearSpeak tags - store voice messages on NFC tags, using the custom URI scheme as defined by the NearSpeak app: http://www.nearspeak.at/
+
 
 ### Usage example
 
-Create a RAW Ndef Message by defined input:
+#####Create a URI Record:
+
+//Create Ndef Message
+var ndefMessage = new NdefLibrary.NdefMessage();
+//Create Ndef Uri Record
+var ndefUriRecord = new NdefLibrary.NdefUriRecord();
+//Set Uri in record
+ndefUriRecord.setUri("https://www.mobilefactory.at");
+//Add record to message
+ndefMessage.push(ndefUriRecord);
+//Get byte array for NFC tag
+var byteArray = ndefMessage.toByteArray();
+
+#####Create a RAW Ndef Message by defined input:
 
 var recrodType = new Array(1,3,1,3,5,6,7);
 var recrodPayload = new Array(1,2,1);
@@ -56,12 +72,14 @@ var ndefRecord2 = new NdefLibrary.NdefRecord(NdefLibrary.NdefRecord.TypeNameForm
 ndefRecord2.setPayload(recrodPayload);
 ndefRecord2.setId(id);
 
-var ndefMessage = new NdefLibrary.NdefMessage(ndefRecord2);
+var ndefMessage = new NdefLibrary.NdefMessage();
+ndefMessage.push(ndefRecord2);
 var byteArray = ndefMessage.toByteArray();
 
-Create a RAW Ndef Message by byte array from NFC tag:
+#####Create a RAW Ndef Message by byte array from NFC tag:
 
 var ndefMessage = NdefLibrary.NdefMessage.fromByteArray(byteArray);
+
 
 ### Status & Roadmap
 

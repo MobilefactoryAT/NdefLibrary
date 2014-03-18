@@ -243,6 +243,44 @@
 		deepEqual(new NdefLibrary.NdefAndroidAppRecord(records[1]).getPackageName(), "com.twitter.android");
 	
      });
+
+	test('Dictionary Multible Text UTF8', function() {
+		
+		var result = "Mopius";
+		var lang = "en";
+		var encoding = NdefLibrary.NdefTextRecord.TextEncodingType.Utf8;
+		var url = [0xD1,0x01,0x09,0x54,0x02,0x65,0x6E,0x4D,0x6F,0x70,0x69,0x75,0x73];
+		var ndefMessage = NdefLibrary.NdefMessage.fromByteArray(url);
+		var records = ndefMessage.getRecords();
+		deepEqual(records.length, 1);
+		deepEqual(ndefMessage.length(), 1);
+		deepEqual(NdefLibrary.NdefTextRecord.isRecordType(records[0]), true);
+		
+		var textRecord = new NdefLibrary.NdefTextRecord(records[0]);
+		deepEqual(textRecord.getText(), result);
+		deepEqual(textRecord.getLanguageCode(), lang);
+		deepEqual(textRecord.getTextEncoding(), encoding);
+	
+     });
+
+	test('Dictionary Multible Text UTF16', function() {
+		
+		var result = "Mopius";
+		var lang = "en";
+		var encoding = NdefLibrary.NdefTextRecord.TextEncodingType.Utf16;
+		var url = [0xD1,0x01,0x0F,0x54,0x82,0x65,0x6E,0x00,0x4D,0x00,0x6F,0x00,0x70,0x00,0x69,0x00,0x75,0x00,0x73];
+		var ndefMessage = NdefLibrary.NdefMessage.fromByteArray(url);
+		var records = ndefMessage.getRecords();
+		deepEqual(records.length, 1);
+		deepEqual(ndefMessage.length(), 1);
+		deepEqual(NdefLibrary.NdefTextRecord.isRecordType(records[0]), true);
+		
+		var textRecord = new NdefLibrary.NdefTextRecord(records[0]);
+		deepEqual(textRecord.getText(), result);
+		deepEqual(textRecord.getLanguageCode(), lang);
+		deepEqual(textRecord.getTextEncoding(), encoding);
+	
+     });
      
      
    } ());

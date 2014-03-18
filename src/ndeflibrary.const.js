@@ -143,6 +143,14 @@ const fromArray = function(array) {
   }
   return result;
 };
+
+const fromArrayUTF16 = function(array) {
+  var result = "";
+  for (var i = 0; i < array.length-1; i+=2) {
+    result += String.fromCharCode(parseInt(array[i]),parseInt(array[i+1]));
+  }
+  return result;
+};
   
 
 

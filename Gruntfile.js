@@ -22,6 +22,7 @@ module.exports = function(grunt) {
       sub('src/submodule/%s.NdefGeoRecord.js'),
       sub('src/submodule/%s.NdefTelRecord.js'),
       sub('src/submodule/%s.NdefUriRecord.js'),
+      sub('src/submodule/%s.NdefTextRecord.js'),
       sub('src/submodule/%s.NdefRecord.js'),
       sub('src/submodule/%s.NdefMessage.js')
     ];

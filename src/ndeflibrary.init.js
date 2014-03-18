@@ -48,6 +48,7 @@ var initNdefLibrary = function (context) {
   initLibraryNdefTelRecord(context);
   initLibraryNdefSocialRecord(context);
   initLibraryNdefGeoRecord(context);
+  initLibraryNdefTextRecord(context);
   
   
   return context.NdefLibrary;
